@@ -1,0 +1,25 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+
+    <changeSet id="3" author="rsuski">
+        <createTable tableName="students_enrolled_to_courses">
+            <column name="student_id" type="varchar(32)">
+                <constraints nullable="false" />
+            </column>
+            <column name="course_id" type="varchar(32)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_students"
+                                 baseTableName="students_enrolled_to_courses" baseColumnNames="student_id"
+                                 referencedTableName="students" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_courses"
+                                 baseTableName="students_enrolled_to_courses" baseColumnNames="course_id"
+                                 referencedTableName="courses" referencedColumnNames="id" />
+    </changeSet>
+</databaseChangeLog>
