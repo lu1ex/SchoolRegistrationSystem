@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class CourseEntity {
 
     public CourseEntity(CourseRequestBodyModel courseRequestBodyModel) {
         this.id = UUID.randomUUID().toString();
-        this.name = StringUtils.capitalize(courseRequestBodyModel.getName().toLowerCase());
+        this.name = courseRequestBodyModel.getName().toUpperCase();
         this.schoolName = StringUtils.capitalize(courseRequestBodyModel.getSchoolName().toLowerCase());
     }
 }

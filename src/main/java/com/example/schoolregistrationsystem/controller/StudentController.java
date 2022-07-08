@@ -23,7 +23,7 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> get(@PathVariable String id) {
-        StudentEntity studentEntity = studentEntityService.getStudentEntityById(id);
+        StudentEntity studentEntity = studentEntityService.getStudentEntityByStudentCardID(id);
         StudentDTO studentDTO = modelMapperService.mapObjectToObjectOfEnteredClass(studentEntity, StudentDTO.class);
         return new ResponseEntity<>(studentDTO, HttpStatus.OK);
     }

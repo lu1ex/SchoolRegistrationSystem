@@ -2,7 +2,6 @@ package com.example.schoolregistrationsystem.service;
 
 import com.example.schoolregistrationsystem.entity.CourseEntity;
 import com.example.schoolregistrationsystem.exceptions.CourseAlreadyExistsException;
-import com.example.schoolregistrationsystem.exceptions.StudentCardIDAlreadyExistsException;
 import com.example.schoolregistrationsystem.exceptions.ValueNotFoundException;
 import com.example.schoolregistrationsystem.repository.CourseEntityRepository;
 import com.example.schoolregistrationsystem.requestBodyModel.CourseRequestBodyModel;
@@ -16,15 +15,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 @Service
 @RequiredArgsConstructor
 public class CourseEntityService {
     private final CourseEntityRepository courseEntityRepository;
 
     public CourseEntity createCourseEntity(CourseRequestBodyModel courseRequestBodyModel) {
-        if (courseEntityRepository.findByNameAndSchoolName(courseRequestBodyModel.getName(),
-                courseRequestBodyModel.getSchoolName()).isPresent()) {
+        if (courseEntityRepository.findByNameAndSchoolName(courseRequestBodyModel.getName().toUpperCase(),
+                courseRequestBodyModel.getSchoolName().toUpperCase()).isPresent()) {
             throw new CourseAlreadyExistsException();
         }
         CourseEntity newCourseEntity = new CourseEntity(courseRequestBodyModel);
@@ -34,6 +32,15 @@ public class CourseEntityService {
 
     public CourseEntity getCourseEntityById(String id) {
         return courseEntityRepository.findById(id).orElseThrow((() -> new ValueNotFoundException(id)));
+    }
+
+    public CourseEntity getCourseEntityByNameAndSchoolName(String courseName, String schoolName) {
+        return courseEntityRepository.findByNameAndSchoolName(courseName.toUpperCase(), schoolName)
+                .orElseThrow((() -> new ValueNotFoundException(courseName)));
+    }
+
+    public CourseEntity getCourseEntityByName(String courseName) {
+        return courseEntityRepository.findByName(courseName.toUpperCase()).orElseThrow((() -> new ValueNotFoundException(courseName)));
     }
 
     public Set<CourseEntity> getAllCoursesEntities() {

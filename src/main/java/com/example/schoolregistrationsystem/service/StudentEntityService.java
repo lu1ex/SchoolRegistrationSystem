@@ -32,6 +32,10 @@ public class StudentEntityService {
         return studentEntityRepository.findById(id).orElseThrow((() -> new ValueNotFoundException(id)));
     }
 
+    public StudentEntity getStudentEntityByStudentCardID(String studentCardID) {
+        return studentEntityRepository.findByStudentCardID(studentCardID).orElseThrow((() -> new ValueNotFoundException(studentCardID)));
+    }
+
     public Set<StudentEntity> getAllStudentEntities() {
         return new HashSet<>(studentEntityRepository.findAll());
     }
