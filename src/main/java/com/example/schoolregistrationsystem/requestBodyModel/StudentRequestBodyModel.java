@@ -4,6 +4,7 @@ import com.example.schoolregistrationsystem.validation.PhoneNumber;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -16,7 +17,7 @@ public class StudentRequestBodyModel {
     private String name;
     @NotEmpty
     private String surname;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     @PhoneNumber
     private String phoneNumber;
     @NotEmpty

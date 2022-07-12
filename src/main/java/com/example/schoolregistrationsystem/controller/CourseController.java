@@ -1,11 +1,13 @@
 package com.example.schoolregistrationsystem.controller;
 
-import com.example.schoolregistrationsystem.DTO.CourseDTO;
+import com.example.schoolregistrationsystem.DTO.CourseFullDTO;
 import com.example.schoolregistrationsystem.entity.CourseEntity;
 import com.example.schoolregistrationsystem.requestBodyModel.CourseRequestBodyModel;
 import com.example.schoolregistrationsystem.service.CourseEntityService;
 import com.example.schoolregistrationsystem.service.ModelMapperService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,24 +24,24 @@ public class CourseController {
     private final ModelMapperService modelMapperService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDTO> get(@PathVariable String id) {
+    public ResponseEntity<CourseFullDTO> get(@PathVariable String id) {
         CourseEntity courseEntity = courseEntityService.getCourseEntityById(id);
-        CourseDTO courseDTO = modelMapperService.mapObjectToObjectOfEnteredClass(courseEntity, CourseDTO.class);
-        return new ResponseEntity<>(courseDTO, HttpStatus.OK);
+        CourseFullDTO courseFullDTO = modelMapperService.mapObjectToObjectOfEnteredClass(courseEntity, CourseFullDTO.class);
+        return new ResponseEntity<>(courseFullDTO, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Set<CourseDTO>> getAll() {
+    public ResponseEntity<Set<CourseFullDTO>> getAll(@PageableDefault(value = 10) Pageable pageable) {
         Set<CourseEntity> courseEntitySet = courseEntityService.getAllCoursesEntities();
-        Set<CourseDTO> courseDTOSet = modelMapperService.mapSetToSetOfEnteredClass(courseEntitySet, CourseDTO.class);
-        return new ResponseEntity<>(courseDTOSet, HttpStatus.OK);
+        Set<CourseFullDTO> courseFullDTOSet = modelMapperService.mapSetToSetOfEnteredClass(courseEntitySet, CourseFullDTO.class);
+        return new ResponseEntity<>(courseFullDTOSet, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<CourseDTO> post(@RequestBody @Valid CourseRequestBodyModel courseRequestBodyModel) {
+    public ResponseEntity<CourseFullDTO> post(@RequestBody @Valid CourseRequestBodyModel courseRequestBodyModel) {
         CourseEntity newCourseEntity = courseEntityService.createCourseEntity(courseRequestBodyModel);
-        CourseDTO courseDTO = modelMapperService.mapObjectToObjectOfEnteredClass(newCourseEntity, CourseDTO.class);
-        return new ResponseEntity<>(courseDTO, HttpStatus.CREATED);
+        CourseFullDTO courseFullDTO = modelMapperService.mapObjectToObjectOfEnteredClass(newCourseEntity, CourseFullDTO.class);
+        return new ResponseEntity<>(courseFullDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -49,18 +51,18 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourseDTO> put(@PathVariable String id,
-                                          @RequestBody @Valid CourseRequestBodyModel courseRequestBodyModel) {
+    public ResponseEntity<CourseFullDTO> put(@PathVariable String id,
+                                             @RequestBody @Valid CourseRequestBodyModel courseRequestBodyModel) {
         CourseEntity courseEntity = courseEntityService.putCourseEntity(id, courseRequestBodyModel);
-        CourseDTO courseDTO = modelMapperService.mapObjectToObjectOfEnteredClass(courseEntity, CourseDTO.class);
-        return new ResponseEntity<>(courseDTO, HttpStatus.OK);
+        CourseFullDTO courseFullDTO = modelMapperService.mapObjectToObjectOfEnteredClass(courseEntity, CourseFullDTO.class);
+        return new ResponseEntity<>(courseFullDTO, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CourseDTO> patch(@PathVariable String id,
-                                            @RequestBody @Valid Map<Object, Object> fields) {
+    public ResponseEntity<CourseFullDTO> patch(@PathVariable String id,
+                                               @RequestBody @Valid Map<Object, Object> fields) {
         CourseEntity courseEntity = courseEntityService.patchCourseEntity(id, fields);
-        CourseDTO courseDTO = modelMapperService.mapObjectToObjectOfEnteredClass(courseEntity, CourseDTO.class);
-        return new ResponseEntity<>(courseDTO, HttpStatus.OK);
+        CourseFullDTO courseFullDTO = modelMapperService.mapObjectToObjectOfEnteredClass(courseEntity, CourseFullDTO.class);
+        return new ResponseEntity<>(courseFullDTO, HttpStatus.OK);
     }
 }

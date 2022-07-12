@@ -47,6 +47,10 @@ public class CourseEntityService {
         return new HashSet<>(courseEntityRepository.findAll());
     }
 
+    public Set<CourseEntity> getAllCourseEntitiesBySchoolName(String schoolName) {
+        return new HashSet<>(courseEntityRepository.findAllBySchoolName(schoolName));
+    }
+
     public void deleteCourseEntityById(String id) {
         courseEntityRepository.deleteById(id);
     }

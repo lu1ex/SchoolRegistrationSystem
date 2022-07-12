@@ -26,12 +26,12 @@ public class SchoolSystemService {
         StudentEntity student = studentEntityService.getStudentEntityByStudentCardID(studentCardID);
         CourseEntity course = courseEntityService.getCourseEntityByNameAndSchoolName(courseName, schoolName);
 
-        if (student.getCourses().size() == 5) {
+        if (student.getCourses().contains(course)) {
+            throw new StudentAlreadyAssignedToCourseException();
+        } else if (student.getCourses().size() == 5) {
             throw new StudentReachedMaxNumberOfCourserException();
         } else if (course.getStudents().size() == 50) {
             throw new CourseReachedMaxNumberOfStudentsException();
-        } else if (student.getCourses().contains(course)) {
-            throw new StudentAlreadyAssignedToCourseException();
         } else {
             student.getCourses().add(course);
             studentEntityRepository.saveAndFlush(student);
@@ -52,8 +52,8 @@ public class SchoolSystemService {
         }
     }
 
-    public Set<StudentEntity> getAllStudentsFromCourse(String courseName) {
-       return courseEntityService.getCourseEntityByName(courseName).getStudents();
+    public Set<StudentEntity> getAllStudentsFromCourse(String courseName, String schoolName) {
+        return courseEntityService.getCourseEntityByNameAndSchoolName(courseName, schoolName).getStudents();
     }
 
     public Set<CourseEntity> getAllCoursesFromStudent(String studentCardID) {
@@ -66,8 +66,8 @@ public class SchoolSystemService {
                 .collect(Collectors.toSet());
     }
 
-    public Set<CourseEntity> getAllCoursesWithoutEnrolledStudents() {
-        return courseEntityService.getAllCoursesEntities().stream()
+    public Set<CourseEntity> getAllCoursesWithoutEnrolledStudents(String schoolName) {
+        return courseEntityService.getAllCourseEntitiesBySchoolName(schoolName).stream()
                 .filter(courseEntity -> courseEntity.getStudents().isEmpty())
                 .collect(Collectors.toSet());
     }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Lock;
 import javax.persistence.LockModeType;
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CourseEntityRepository extends JpaRepository<CourseEntity, String> {
 
@@ -17,4 +18,6 @@ public interface CourseEntityRepository extends JpaRepository<CourseEntity, Stri
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Transactional
     Optional<CourseEntity> findByNameAndSchoolName(String courseName, String schoolName);
+
+    Set<CourseEntity> findAllBySchoolName(String schoolName);
 }

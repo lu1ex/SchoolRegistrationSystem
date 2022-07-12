@@ -2,13 +2,11 @@ package com.example.schoolregistrationsystem.entity;
 
 import com.example.schoolregistrationsystem.requestBodyModel.StudentRequestBodyModel;
 import liquibase.repackaged.org.apache.commons.lang3.StringUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +15,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "students")
@@ -27,7 +26,7 @@ public class StudentEntity {
     private String id;
     private String name;
     private String surname;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String phoneNumber;
     @Column(name = "student_card_ID")
     private String studentCardID;
@@ -40,8 +39,8 @@ public class StudentEntity {
 
     public StudentEntity(StudentRequestBodyModel studentRequestBodyModel) {
         this.id = UUID.randomUUID().toString();
-        this.name = StringUtils.capitalize(studentRequestBodyModel.getName().toLowerCase());
-        this.surname = StringUtils.capitalize(studentRequestBodyModel.getSurname().toLowerCase());
+        this.name = studentRequestBodyModel.getName().toUpperCase();
+        this.surname = studentRequestBodyModel.getSurname().toUpperCase();
         this.dateOfBirth = studentRequestBodyModel.getDateOfBirth();
         this.phoneNumber = studentRequestBodyModel.getPhoneNumber();
         this.studentCardID = studentRequestBodyModel.getStudentCardID();

@@ -2,10 +2,7 @@ package com.example.schoolregistrationsystem.entity;
 
 import com.example.schoolregistrationsystem.requestBodyModel.CourseRequestBodyModel;
 import liquibase.repackaged.org.apache.commons.lang3.StringUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "courses")
@@ -27,12 +25,12 @@ public class CourseEntity {
     private String id;
     private String name;
     private String schoolName;
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER)
     private Set<StudentEntity> students = new HashSet<>();
 
     public CourseEntity(CourseRequestBodyModel courseRequestBodyModel) {
         this.id = UUID.randomUUID().toString();
         this.name = courseRequestBodyModel.getName().toUpperCase();
-        this.schoolName = StringUtils.capitalize(courseRequestBodyModel.getSchoolName().toLowerCase());
+        this.schoolName = courseRequestBodyModel.getSchoolName().toUpperCase();
     }
 }
