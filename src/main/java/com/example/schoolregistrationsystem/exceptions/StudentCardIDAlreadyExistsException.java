@@ -7,5 +7,10 @@ public class StudentCardIDAlreadyExistsException extends RuntimeException {
     public StudentCardIDAlreadyExistsException() {
         super(format("There is already student with that student card ID."));
     }
+
+
+    public String getSimpleName() {
+        return "StudentCardIDAlreadyExistsException";
+    }
 }
 

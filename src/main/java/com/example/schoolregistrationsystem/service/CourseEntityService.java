@@ -25,9 +25,7 @@ public class CourseEntityService {
                 courseRequestBodyModel.getSchoolName().toUpperCase()).isPresent()) {
             throw new CourseAlreadyExistsException();
         }
-        CourseEntity newCourseEntity = new CourseEntity(courseRequestBodyModel);
-        courseEntityRepository.saveAndFlush(newCourseEntity);
-        return newCourseEntity;
+        return courseEntityRepository.saveAndFlush(new CourseEntity(courseRequestBodyModel));
     }
 
     public CourseEntity getCourseEntityById(String id) {
@@ -52,7 +50,8 @@ public class CourseEntityService {
     }
 
     public void deleteCourseEntityById(String id) {
-        courseEntityRepository.deleteById(id);
+        CourseEntity courseEntity = getCourseEntityById(id);
+        courseEntityRepository.delete(courseEntity);
     }
 
     public CourseEntity putCourseEntity(String id, CourseRequestBodyModel courseRequestBodyModel) {

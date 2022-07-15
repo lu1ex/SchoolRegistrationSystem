@@ -18,5 +18,5 @@ public class StudentFullDTO {
     private LocalDate dateOfBirth;
     private String phoneNumber;
     private String studentCardID;
-    private Set<CourseEntity> courses = new HashSet<>();
+    private Set<CourseDTO> courses = new HashSet<>();
 }

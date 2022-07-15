@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -13,13 +12,13 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 public class StudentRequestBodyModel {
-    @NotEmpty
+    @NotEmpty(message = "Name can not be empty")
     private String name;
-    @NotEmpty
+    @NotEmpty(message = "Surname can not be empty")
     private String surname;
     private LocalDate dateOfBirth;
-    @PhoneNumber
+    @PhoneNumber(message = "Only 9 numbers format allowed")
     private String phoneNumber;
-    @NotEmpty
+    @NotEmpty(message = "Student card ID can not be empty")
     private String studentCardID; // numer legitymacji szkolnej / indeksu
 }

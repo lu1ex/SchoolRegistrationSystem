@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CourseEntityControllerAndServiceTest {
+public class CourseEntityControllerIntegrationTest {
 
     @Inject
     private MockMvc mvc;
@@ -120,7 +120,7 @@ public class CourseEntityControllerAndServiceTest {
         //then
         assertTrue(result.getResponse().getContentAsString()
                 .contains("Object with id 0000000000000000000000idNotExist not found"));
-        assertEquals(400, result.getResponse().getStatus());
+        assertEquals(404, result.getResponse().getStatus());
     }
 
     @Test
@@ -191,6 +191,26 @@ public class CourseEntityControllerAndServiceTest {
 
     @Test
     @Sql(scripts = {"classpath:db_test/student_and_course_crud_db_test.sql"})
+    void deleteCourseEntityThrowsExceptionWhenCourseNotExists() throws Exception {
+        //given
+        String courseID = "000000000000000000000idNotExists";
+        int numberOfCoursesInDBBefore = courseEntityRepository.findAll().size();
+
+        //when
+        MvcResult result = mvc.perform(delete("/course/" + courseID))
+                .andDo(print())
+                .andReturn();
+        int numberOfCoursesInDBAfter = courseEntityRepository.findAll().size();
+
+        //then
+        assertEquals(numberOfCoursesInDBAfter, numberOfCoursesInDBBefore);
+        assertTrue(result.getResponse().getContentAsString()
+                .contains("Object with id 000000000000000000000idNotExists not found"));
+        assertEquals(404, result.getResponse().getStatus());
+    }
+
+    @Test
+    @Sql(scripts = {"classpath:db_test/student_and_course_crud_db_test.sql"})
     void putCourseEntityWorks() throws Exception {
         //given
         String courseID = "00000000000000000000000000000111";
@@ -214,13 +234,34 @@ public class CourseEntityControllerAndServiceTest {
 
     @Test
     @Sql(scripts = {"classpath:db_test/student_and_course_crud_db_test.sql"})
+    void putCourseEntityThrowsExceptionWhenCourseNotExists() throws Exception {
+        //given
+        String courseID = "000000000000000000000idNotExists";
+        CourseRequestBodyModel courseRequestBodyModel = new CourseRequestBodyModel();
+        courseRequestBodyModel.setName("PHYSICS");
+        courseRequestBodyModel.setSchoolName("SCHOOLNRX"); //was MATH
+
+        //when
+        MvcResult result = mvc.perform(put("/course/" + courseID)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(courseRequestBodyModel)))
+                .andDo(print())
+                .andReturn();
+
+        //then
+        assertTrue(result.getResponse().getContentAsString()
+                .contains("Object with id 000000000000000000000idNotExists not found"));
+        assertEquals(404, result.getResponse().getStatus());
+    }
+
+    @Test
+    @Sql(scripts = {"classpath:db_test/student_and_course_crud_db_test.sql"})
     void patchCourseEntityWorks() throws Exception {
         //given
         String courseID = "00000000000000000000000000000111";
         Map<String, String> fieldToChangeAndNewValue = Map.of("name", "PHYSICS");
 
         CourseFullDTO expectedResponseObject = new CourseFullDTO("PHYSICS", "SCHOOLNR1", Set.of());
-
 
         //when
         MvcResult result = mvc.perform(patch("/course/" + courseID)
@@ -232,5 +273,25 @@ public class CourseEntityControllerAndServiceTest {
         //then
         assertTrue(result.getResponse().getContentAsString().contains(objectMapper.writeValueAsString(expectedResponseObject)));
         assertEquals(200, result.getResponse().getStatus());
+    }
+
+    @Test
+    @Sql(scripts = {"classpath:db_test/student_and_course_crud_db_test.sql"})
+    void patchCourseEntityThrowsExceptionWhenCourseNotExists() throws Exception {
+        //given
+        String courseID = "000000000000000000000idNotExists";
+        Map<String, String> fieldToChangeAndNewValue = Map.of("name", "PHYSICS");
+
+        //when
+        MvcResult result = mvc.perform(patch("/course/" + courseID)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(fieldToChangeAndNewValue)))
+                .andDo(print())
+                .andReturn();
+
+        //then
+        assertTrue(result.getResponse().getContentAsString()
+                .contains("Object with id 000000000000000000000idNotExists not found"));
+        assertEquals(404, result.getResponse().getStatus());
     }
 }

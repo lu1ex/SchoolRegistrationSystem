@@ -19,15 +19,18 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(value = {ValueNotFoundException.class})
+    public ResponseEntity<Object> handleExceptions(Exception ex) {
+        return new ResponseEntity<>(new ExceptionResponseObject(
+                404, ex.getClass().getSimpleName(), ex.getLocalizedMessage()),
+                new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(value = {RuntimeException.class})
     public ResponseEntity<Object> handleRuntimeException(Exception ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", 400);
-        body.put("error", ex.getLocalizedMessage());
-        body.put("Error name", ex.getClass());
-
-        return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ExceptionResponseObject(
+                400, ex.getClass().getSimpleName(), ex.getLocalizedMessage()),
+                new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -35,15 +38,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status,
             WebRequest request) {
 
-        Map<String, Object> body = new LinkedHashMap<>();
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+        ExceptionResponseObject exceptionResponseObject = new ExceptionResponseObject(
+                status.value(), "MethodArgumentNotValidException", errors.toString());
+        /*Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", status.value());
 
-        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+
 
         body.put("errors", errors);
-
-        return new ResponseEntity<>(body, headers, status);
+*/
+        return new ResponseEntity<>(exceptionResponseObject, headers, status);
     }
 }

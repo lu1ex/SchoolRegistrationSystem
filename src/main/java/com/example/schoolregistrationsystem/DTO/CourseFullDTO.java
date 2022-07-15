@@ -14,5 +14,5 @@ import java.util.Set;
 public class CourseFullDTO {
     private String name;
     private String schoolName;
-    private Set<StudentFullDTO> students = new HashSet<>();
+    private Set<StudentDTO> students = new HashSet<>();
 }

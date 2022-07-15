@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SchoolSystemControllerAndServiceIntegrationTest {
+public class SchoolSystemControllerIntegrationTest {
 
     @Inject
     private MockMvc mvc;
@@ -292,7 +292,7 @@ public class SchoolSystemControllerAndServiceIntegrationTest {
 
         //then
         assertTrue(result.getResponse().getContentAsString().contains(expectedResponseObject));
-        assertEquals(400, result.getResponse().getStatus());
+        assertEquals(404, result.getResponse().getStatus());
     }
 
     @Test
@@ -332,7 +332,7 @@ public class SchoolSystemControllerAndServiceIntegrationTest {
 
         //then
         assertTrue(result.getResponse().getContentAsString().contains(expectedResponseObject));
-        assertEquals(400, result.getResponse().getStatus());
+        assertEquals(404, result.getResponse().getStatus());
     }
 
     @Test

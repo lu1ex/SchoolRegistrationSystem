@@ -23,9 +23,7 @@ public class StudentEntityService {
         if (studentEntityRepository.findByStudentCardID(studentRequestBodyModel.getStudentCardID()).isPresent()) {
             throw new StudentCardIDAlreadyExistsException();
         }
-        StudentEntity newStudentEntity = new StudentEntity(studentRequestBodyModel);
-        studentEntityRepository.saveAndFlush(newStudentEntity);
-        return newStudentEntity;
+        return studentEntityRepository.saveAndFlush(new StudentEntity(studentRequestBodyModel));
     }
 
     public StudentEntity getStudentEntityById(String id) {
@@ -41,7 +39,8 @@ public class StudentEntityService {
     }
 
     public void deleteStudentEntityById(String id) {
-        studentEntityRepository.deleteById(id);
+        StudentEntity studentEntity = getStudentEntityById(id);
+        studentEntityRepository.delete(studentEntity);
     }
 
     public StudentEntity putStudentEntity(String id, StudentRequestBodyModel studentRequestBodyModel) {
