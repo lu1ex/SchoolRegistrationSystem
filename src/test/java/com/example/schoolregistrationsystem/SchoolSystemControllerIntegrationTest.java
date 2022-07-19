@@ -88,7 +88,7 @@ public class SchoolSystemControllerIntegrationTest {
 
         //then
         assertTrue(result.getResponse().getContentAsString().contains(expectedResponseObject));
-        assertEquals(400, result.getResponse().getStatus());
+        assertEquals(404, result.getResponse().getStatus());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class SchoolSystemControllerIntegrationTest {
 
         //then
         assertTrue(result.getResponse().getContentAsString().contains(expectedResponseObject));
-        assertEquals(400, result.getResponse().getStatus());
+        assertEquals(404, result.getResponse().getStatus());
     }
 
     @Test
@@ -193,7 +193,7 @@ public class SchoolSystemControllerIntegrationTest {
 
     @Test
     @Sql(scripts = {"classpath:db_test/school_system_db_test.sql"})
-    void unregisterStudentToCourseThrowsBadRequestWhenStudentNotExistsInDB() throws Exception {
+    void unregisterStudentFromCourseThrowsBadRequestWhenStudentNotExistsInDB() throws Exception {
         //given
         RegisterStudentRequestBodyModel registerStudentRequestBodyModel = new RegisterStudentRequestBodyModel(
                 "333333", "RELIGION", "SCHOOLNR1");
@@ -208,12 +208,12 @@ public class SchoolSystemControllerIntegrationTest {
 
         //then
         assertTrue(result.getResponse().getContentAsString().contains(expectedResponseObject));
-        assertEquals(400, result.getResponse().getStatus());
+        assertEquals(404, result.getResponse().getStatus());
     }
 
     @Test
     @Sql(scripts = {"classpath:db_test/school_system_db_test.sql"})
-    void unregisterStudentToCourseThrowsBadRequestWhenCourseNotExistsInDB() throws Exception {
+    void unregisterStudentFromCourseThrowsBadRequestWhenCourseNotExistsInDB() throws Exception {
         //given
         RegisterStudentRequestBodyModel registerStudentRequestBodyModel = new RegisterStudentRequestBodyModel(
                 "999998", "PHYSICS", "SCHOOLNR2");
@@ -228,7 +228,7 @@ public class SchoolSystemControllerIntegrationTest {
 
         //then
         assertTrue(result.getResponse().getContentAsString().contains(expectedResponseObject));
-        assertEquals(400, result.getResponse().getStatus());
+        assertEquals(404, result.getResponse().getStatus());
     }
 
     @Test

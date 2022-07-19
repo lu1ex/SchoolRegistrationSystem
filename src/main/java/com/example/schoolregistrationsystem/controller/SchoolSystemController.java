@@ -102,7 +102,7 @@ public class SchoolSystemController {
                             array = @ArraySchema(schema = @Schema(implementation = StudentDTO.class)))}),
             @ApiResponse(responseCode = "404", description = "Course not exists in that school. " +
                     "Thrown ValueNotFoundException. Returns ExceptionResponseObject", content = @Content)})
-    @GetMapping("{schoolName}/{courseName}/students")
+    @GetMapping("/{schoolName}/{courseName}/students")
     public ResponseEntity<Set<StudentDTO>> getAllStudentsFromCourse(@PageableDefault(value = 10) Pageable pageable,
                                                                     @PathVariable String courseName, @PathVariable String schoolName) {
         Set<StudentEntity> studentEntities = schoolSystemService.getAllStudentsFromCourse(courseName, schoolName);
